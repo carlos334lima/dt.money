@@ -1,7 +1,9 @@
 import React from "react";
 
+//@assets
 import incomeSvg from "../../assets/income.svg";
 
+//@styles
 import { Container } from "./styles";
 
 export function Summary() {
