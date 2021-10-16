@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 //@libraries
 import { createServer } from "miragejs";
@@ -6,6 +6,8 @@ import { createServer } from "miragejs";
 //@components
 import { Header } from "./components/Header";
 import { Dashboard } from "./components/Dashboard";
+import { NewTransactionModal } from "./components/NewTransactionModal";
+import ReactModal from "react-modal";
 
 createServer({
   routes() {
@@ -25,11 +27,27 @@ createServer({
   },
 });
 
+ReactModal.setAppElement('#root');
+
 function App() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  function handleOpenModal() {
+    setIsModalOpen(true);
+  }
+
+  function handleCloseModal() {
+    setIsModalOpen(false);
+  }
+
   return (
     <>
-      <Header />
+      <Header handleOpenModal={handleOpenModal} />
       <Dashboard />
+      <NewTransactionModal
+        handleCloseModal={handleCloseModal}
+        isModalOpen={isModalOpen}
+      />
     </>
   );
 }
