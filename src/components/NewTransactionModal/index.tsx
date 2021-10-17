@@ -7,6 +7,7 @@ import Modal from "react-modal";
 import closeImg from "../../assets/close.svg";
 import incomeImg from "../../assets/income.svg";
 import outcomeImg from "../../assets/outcome.svg";
+import { api } from "../../services/api";
 
 //@styles
 import { Container, TransactionTypeContainer, RadioBox } from "./styles";
@@ -20,10 +21,24 @@ const NewTransactionModal = ({
   isModalOpen,
   handleCloseModal,
 }: NewTransactionModalProps) => {
+  const [title, setTitle] = useState("");
+  const [value, setValue] = useState(0);
   const [type, setType] = useState<"deposit" | "withdraw">("deposit");
+  const [category, setCategory] = useState("");
 
-  function handleRegisterCount(event: FormEvent) {
+  function handleCreateNewTransaction(event: FormEvent) {
     event.preventDefault();
+
+    const data = {
+      title,
+      value,
+      type,
+      category,
+    };
+
+    api.post('/transactions', data).then((response) => {
+      console.log(response);
+    })
   }
 
   return (
@@ -40,11 +55,21 @@ const NewTransactionModal = ({
       >
         <img src={closeImg} alt="Fechar modal" />
       </button>
-      <Container>
+      <Container onSubmit={handleCreateNewTransaction}>
         <h2>Cadastrar Transação</h2>
 
-        <input type="text" placeholder="Título" />
-        <input type="number" placeholder="Valor" />
+        <input
+          type="text"
+          placeholder="Título"
+          value={title}
+          onChange={(event) => setTitle(event.target.value)}
+        />
+        <input
+          type="number"
+          placeholder="Valor"
+          value={value}
+          onChange={(event) => setValue(Number(event.target.value))}
+        />
 
         <TransactionTypeContainer>
           <RadioBox
@@ -67,9 +92,13 @@ const NewTransactionModal = ({
           </RadioBox>
         </TransactionTypeContainer>
 
-        <input placeholder="categoria" />
+        <input
+          placeholder="categoria"
+          value={category}
+          onChange={(event) => setCategory(event.target.value)}
+        />
 
-        <button type="submit" onClick={handleRegisterCount}>
+        <button type="submit" onClick={handleCreateNewTransaction}>
           Cadastrar
         </button>
       </Container>
