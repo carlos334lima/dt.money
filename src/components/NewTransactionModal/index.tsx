@@ -20,6 +20,12 @@ const NewTransactionModal = ({
   isModalOpen,
   handleCloseModal,
 }: NewTransactionModalProps) => {
+  const [type, setType] = useState<"deposit" | "withdraw">("deposit");
+
+  function handleRegisterCount(event: FormEvent) {
+    event.preventDefault();
+  }
+
   return (
     <Modal
       isOpen={isModalOpen}
@@ -43,8 +49,8 @@ const NewTransactionModal = ({
         <TransactionTypeContainer>
           <RadioBox
             type="button"
-            onClick={() => {}}
-            isActive={true}
+            onClick={() => setType("deposit")}
+            isActive={type === "deposit"}
             activeColor="green"
           >
             <img src={incomeImg} alt="Entrada" />
@@ -52,8 +58,8 @@ const NewTransactionModal = ({
           </RadioBox>
           <RadioBox
             type="button"
-            onClick={() => {}}
-            isActive={false}
+            onClick={() => setType("withdraw")}
+            isActive={type === "withdraw"}
             activeColor="red"
           >
             <img src={outcomeImg} alt="Saída" />
@@ -63,7 +69,9 @@ const NewTransactionModal = ({
 
         <input placeholder="categoria" />
 
-        <button type="submit">Cadastrar</button>
+        <button type="submit" onClick={handleRegisterCount}>
+          Cadastrar
+        </button>
       </Container>
     </Modal>
   );
