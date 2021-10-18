@@ -1,3 +1,4 @@
+/* eslint-disable array-callback-return */
 import { FormEvent, useState } from "react";
 
 //@libraries
@@ -7,7 +8,9 @@ import Modal from "react-modal";
 import closeImg from "../../assets/close.svg";
 import incomeImg from "../../assets/income.svg";
 import outcomeImg from "../../assets/outcome.svg";
-import { api } from "../../services/api";
+
+//@utils
+import { useTransaction } from "../../hooks/TransactionsContext";
 
 //@styles
 import { Container, TransactionTypeContainer, RadioBox } from "./styles";
@@ -21,24 +24,23 @@ const NewTransactionModal = ({
   isModalOpen,
   handleCloseModal,
 }: NewTransactionModalProps) => {
+  const { createTransaction } = useTransaction();
+
   const [title, setTitle] = useState("");
-  const [value, setValue] = useState(0);
+  const [amount, setAmount] = useState(0);
   const [type, setType] = useState<"deposit" | "withdraw">("deposit");
   const [category, setCategory] = useState("");
 
-  function handleCreateNewTransaction(event: FormEvent) {
+  async function handleCreateNewTransaction(event: FormEvent) {
     event.preventDefault();
 
-    const data = {
-      title,
-      value,
-      type,
-      category,
-    };
+    await createTransaction({ amount, category, title, type });
 
-    api.post('/transactions', data).then((response) => {
-      console.log(response);
-    })
+    setTitle("");
+    setAmount(0);
+    setType("deposit");
+    setCategory("");
+    handleCloseModal();
   }
 
   return (
@@ -67,8 +69,8 @@ const NewTransactionModal = ({
         <input
           type="number"
           placeholder="Valor"
-          value={value}
-          onChange={(event) => setValue(Number(event.target.value))}
+          value={amount}
+          onChange={(event) => setAmount(Number(event.target.value))}
         />
 
         <TransactionTypeContainer>

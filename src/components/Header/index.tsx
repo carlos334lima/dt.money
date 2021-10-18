@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 
 //@assets
 import logoSvg from "../../assets/logo.svg";
@@ -8,7 +8,7 @@ import { Container, Wrapper } from "./styles";
 
 type HeaderProps = {
   handleOpenModal: () => void;
-}
+};
 
 export const Header = ({ handleOpenModal }: HeaderProps) => (
   <Container>
